@@ -134,6 +134,23 @@ are computed on the CPU from the model files, and whatever RAM cannot hold is re
 There is no supported "all experts on CPU" switch — the dense weights are still VRAM-resident, so
 VRAM is a gate, not a knob.
 
+## Presets validated against the planner
+
+`strata launch --plan` parses every flag and prints the placement it would build, without
+touching the machine. All five presets were run through it on 2026-11-10 — **exit 0 each**, the
+only warning being the expected `No graphics card Strata can use was found` on this 6 GiB box:
+
+| Preset | Plan line | Log |
+|---|---|---|
+| `nuclear` | `Plan for 'IST-DAS-2.00bpw 1M'` — context 1M, pictures on, 8 conversations, tuning thorough | `Library/logs/strata-plan-nuclear.log` |
+| `balanced` | 128K, full quality, 4 conversations | `Library/logs/strata-plan-balanced.log` |
+| `code` | 64K, q4_0 KV, 2 conversations | `Library/logs/strata-plan-code.log` |
+| `smoke` | 8K, 5/6 experts | `Library/logs/strata-plan-smoke.log` |
+| `throughput` | 32K, DSpark on, DFlash2 drafting | `Library/logs/strata-plan-throughput.log` |
+
+That is flag-level proof only: it shows the runtime accepts the configuration, not that the
+machine can execute it. For execution the VRAM gate still applies.
+
 ## Measure, don't guess
 
 ```powershell
