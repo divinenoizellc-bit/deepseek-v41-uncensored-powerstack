@@ -144,8 +144,18 @@ if ($Set -in @('all','shared')) {
 }
 
 if ($Set -in @('all','IQ1_M')) {
-  # 5. the smallest gate-passing rung
-  Invoke-Hf $PINS.Uncensored @('*IQ1_M*') 'IQ1_M rung (1.75 bpw, 4 shards)' 112.5
+  # 5. the smallest gate-passing rung.
+  # Written through plain HTTPS, not hf-xet: xet stages chunks and the assembled file at the
+  # same time (~2x the set). After IQ2_XXS the volume cannot hold 2 x 112.4 GiB extra, while a
+  # direct download writes one file at a time (1x peak) and still resumes on interrupt.
+  $prevXet = $env:HF_HUB_DISABLE_XET
+  $env:HF_HUB_DISABLE_XET = '1'
+  try {
+    Invoke-Hf $PINS.Uncensored @('*IQ1_M*') 'IQ1_M rung (1.75 bpw, 4 shards, direct HTTPS)' 112.5
+  } finally {
+    if ($null -eq $prevXet) { Remove-Item Env:\HF_HUB_DISABLE_XET -ErrorAction SilentlyContinue }
+    else { $env:HF_HUB_DISABLE_XET = $prevXet }
+  }
 }
 
 Show-Progress
