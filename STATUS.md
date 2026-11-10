@@ -1,8 +1,8 @@
 # Acquisition status
 
-Generated 2026-11-10T23:11:25Z by `scripts/status.py`.
+Generated 2026-11-10T23:14:05Z by `scripts/status.py`.
 
-**8/16 files · 31.58% · 111.34 GiB of 352.52 GiB** · free disk 338.88 GiB
+**8/16 files · 31.58% · 111.34 GiB of 352.52 GiB** · free disk 327.83 GiB
 
 | Component | Files | Complete | Size | State |
 |---|---:|---:|---:|---|

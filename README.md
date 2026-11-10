@@ -86,6 +86,8 @@ scripts/
   verify_library.py       stream-hash the local mirror; PASS/FAIL/INCOMPLETE per file+set
   index_library.py        build Library/index.json (portability verdict included)
   check_pins.py           re-query the Hub and fail loudly if a pinned file moved
+  gguf_probe.py           parse a GGUF header on disk (the local half of the audit)
+  status.py               live acquisition page; --write refreshes STATUS.md
   fetch.py                dependency-free resumable Range downloader (fallback to `hf`)
 Tools/runtime/            preflight · fetch · import · run presets · publish · cloud kit
 Tools/health/             check-all-tools.ps1 (end-to-end smoke test of every tool on the box)
@@ -130,3 +132,4 @@ their own repos at the pins above, and this repository ships the proof, not the 
 Tooling and documentation in this repository: **MIT** ([`LICENSE`](LICENSE)). Model weights:
 MIT, copyright DeepSeek, redistributed by ISTA-DASLab and AtomicChat — see [`NOTICE`](NOTICE)
 and [`Docs/library/PROVENANCE.md`](Docs/library/PROVENANCE.md).
+
