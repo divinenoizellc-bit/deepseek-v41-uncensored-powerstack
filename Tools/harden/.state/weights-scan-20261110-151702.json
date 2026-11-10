@@ -1,0 +1,53 @@
+{
+  "Summary": {
+    "Root": "C:\\Users\\psand\\AppData\\Local\\Temp\\wt-scanner-test",
+    "Manifest": "C:\\Users\\psand\\AppData\\Local\\Temp\\wt-scanner-test\\.weights-manifest.json",
+    "ScannedUtc": "2026-11-10T22:17:02.7239678Z",
+    "Mode": "QuickVerify",
+    "FileCount": 3,
+    "TotalBytes": 98325.0,
+    "ElapsedSec": 0.0,
+    "Ok": 3,
+    "SizeMismatch": 0,
+    "HashMismatch": 0,
+    "NotInManifest": 0,
+    "MissingOnDisk": 0,
+    "CodeCapable": 1
+  },
+  "MissingOnDisk": [],
+  "Files": [
+    {
+      "Path": "model-00001-of-00002.safetensors",
+      "Size": 65536,
+      "Weight": true,
+      "Format": "data",
+      "Sha256": "CD73C5CD762F5B98438ABE2344D473BE9E4F44A692D0D4062AAE5D1A4EBDD30B",
+      "State": "OkSizeOnly",
+      "Detail": "size matches (contents not hashed)",
+      "VtMalicious": null,
+      "VtTotal": null
+    },
+    {
+      "Path": "shard\\weights.gguf",
+      "Size": 32768,
+      "Weight": true,
+      "Format": "data",
+      "Sha256": "3A62CF80EC381AAC9EEFB7CA5F26DEDE73177166C845537370AF2A06EE7562A1",
+      "State": "OkSizeOnly",
+      "Detail": "size matches (contents not hashed)",
+      "VtMalicious": null,
+      "VtTotal": null
+    },
+    {
+      "Path": "tokenizer.pkl",
+      "Size": 21,
+      "Weight": false,
+      "Format": "code-capable",
+      "Sha256": "B0473D8ED32935029544F36292470A30DEF8DFACE7957C7210656926D1077B3D",
+      "State": "OkSizeOnly",
+      "Detail": "size matches (contents not hashed)",
+      "VtMalicious": null,
+      "VtTotal": null
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+DeepSeek-V4.1-Flash-1017 Power Stack
+Copyright (c) 2026 Divine Noel
+
+This product bundles NO model weights. It pins, verifies and launches weights that
+live in other repositories. Attribution for each layer of the stack follows.
+
+--------------------------------------------------------------------------------
+1. Base model — deepseek-ai/DeepSeek-V4.1-Flash-1017
+   License: MIT. Copyright (c) 2023 DeepSeek.
+   The upstream LICENSE file ships inside every derivative repo and is mirrored
+   unmodified at manifests/source/LICENSE in this repository.
+
+2. GSQ-RCO quantization + shared Engram table
+   ISTA-DASLab/DeepSeek-V4.1-Flash-1017-GSQ-RCO-GGUF
+   https://huggingface.co/ISTA-DASLab/DeepSeek-V4.1-Flash-1017-GSQ-RCO-GGUF
+   Revision pinned: cb02422c900df489cea5833e8a92171224059b3c
+   License: MIT. DASLab, Institute of Science and Technology Austria.
+   Supplies the routed-expert quantization ("GSQ-RCO") and the 110,595,290,816-byte
+   Engram table (DeepSeek-V4.1-Flash-Engram-IQ4_NL.gguf) that every rung reads.
+
+3. Abliteration + GGUF packaging
+   AtomicChat/DeepSeek-V4.1-Flash-1017-Uncensored-GSQ-RCO-GGUF
+   https://huggingface.co/AtomicChat/DeepSeek-V4.1-Flash-1017-Uncensored-GSQ-RCO-GGUF
+   Revision pinned: 4f1d2f730cff977961db81789e81bfc0d3e6dd2e
+   License: MIT. The refusal direction is projected out of the dense residual
+   writers only (attn_output_b, ffn_down_shexp, engram_wkv); the 384 routed expert
+   layers remain byte-for-byte ISTA's.
+
+4. DSpark drafter, vision tower, metadata shard
+   unsloth/DeepSeek-V4.1-Flash-1017-GGUF
+   https://huggingface.co/unsloth/DeepSeek-V4.1-Flash-1017-GGUF
+   Revision pinned: 8a6ec9cf118e785a362ea94ee123c61c70553be6
+   Files: dspark-DeepSeek-V4.1-Flash-1017-Q8_0.gguf, mmproj-BF16.gguf,
+   UD-Q8_K_XL/DeepSeek-V4.1-Flash-1017-UD-Q8_K_XL-00001-of-00009.gguf.
+   Used by the Strata packer/engine for speculative drafting, image input, and the
+   Engram metadata pass. Unsloth's terms and DeepSeek's MIT license apply.
+
+5. Inference runtime
+   Strata (https://github.com/Niko1221/Strata) — MIT.
+   Engine `strata-dsv41` is ported from Project Maya's `maya-ds4` (MIT); the notice
+   lives in Strata's third_party/project-maya.
+   Not bundled in this repository. Acquired only through Strata's signed release
+   feed, verified against SHA256SUMS.txt, and documented in
+   Docs/security/THIRD_PARTY_BINARIES.md.
+
+6. Tooling and documentation in this repository
+   MIT, Copyright (c) 2026 Divine Noel. See LICENSE.
+
+--------------------------------------------------------------------------------
+No affiliation or endorsement is claimed with DeepSeek, ISTA-DASLab, AtomicChat,
+Unsloth, or the Strata project. Names and URLs are used to identify the sources.
+
+THE MODEL IS UNCENSORED BY CONSTRUCTION: it answers requests that the base model
+declines. Whoever runs it is responsible for how it is used and for the laws that
+apply where they are.

@@ -1,0 +1,25 @@
+# model weights — never committed (352.5 GiB, and they belong to their own repos)
+Library/models/
+Library/index.json
+Library/logs/
+*.gguf
+*.part
+*.incomplete
+.cache/
+huggingface/
+
+# third-party scripts we only host to verify against (fetched, hashed, not redistributed)
+Tools/runtime/_strata/
+
+# python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# editors / os
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+.DS_Store

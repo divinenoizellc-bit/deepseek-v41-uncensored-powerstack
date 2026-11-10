@@ -1,0 +1,242 @@
+{
+  "schema": "dsh.integrity-manifest/1",
+  "repo": {
+    "id": "AtomicChat/DeepSeek-V4.1-Flash-1017-Uncensored-GSQ-RCO-GGUF",
+    "type": "model",
+    "author": "AtomicChat",
+    "author_verified": true,
+    "gated": false,
+    "private": false,
+    "license": "mit",
+    "downloads_at_audit": 148870,
+    "likes_at_audit": 424,
+    "last_modified": "2026-10-31T07:29:05.000Z"
+  },
+  "pinned_revision": "4f1d2f730cff977961db81789e81bfc0d3e6dd2e",
+  "revision_is_main": true,
+  "audit": {
+    "performed_at_utc": "2026-11-10T22:10:10+00:00",
+    "auditor": "sec-auditor",
+    "verdict": "CLEAN",
+    "method": "HF tree API + token-less resolve of text artifacts + HTTP range GGUF header/metadata parse"
+  },
+  "file_count": 16,
+  "files": [
+    {
+      "path": ".gitattributes",
+      "size": 2671,
+      "git_oid": "b1e3ec093cff28e4f17fb6750292330a853d0462",
+      "sha256": "4b24b21dda83334526c893f4964f331103bd0c327ceac2f6f2ccabf2eb013c48",
+      "sha256_source": "computed_from_bytes_served_at_pinned_revision",
+      "xet_hash": null,
+      "kind": "git_lfs_rules",
+      "git_blob_sha1_verified": true
+    },
+    {
+      "path": "DeepSeek-V4.1-Flash-1017-GSQ-RCO-IQ1_M-00001-of-00004.gguf",
+      "size": 39358830464,
+      "git_oid": "5f2bfe5337d2b7c73fb97d36b326d60a7277549b",
+      "sha256": "6e3f0d5ff53d00428ec32c079db9e8255cb410ccaa435e5342aaa8a47fe1339d",
+      "sha256_source": "huggingface_lfs_oid",
+      "lfs_pointer_size": 136,
+      "xet_hash": "d86751c8d23b54700146bb5961a8343e1d99bdeabc57d3b229d199e328e4eb0d",
+      "kind": "gguf_shard"
+    },
+    {
+      "path": "DeepSeek-V4.1-Flash-1017-GSQ-RCO-IQ1_M-00002-of-00004.gguf",
+      "size": 39176113248,
+      "git_oid": "98515936de573740852b77e7e37042502ffc5801",
+      "sha256": "34d68c99fdae9948f9f0af0dafe308e805ce0a78d2c48641b24cc57242fdc0af",
+      "sha256_source": "huggingface_lfs_oid",
+      "lfs_pointer_size": 136,
+      "xet_hash": "2648364c4a278323c8573b3b1077ce2bd99b040c801f8d0f0c42f7f0b681733b",
+      "kind": "gguf_shard"
+    },
+    {
+      "path": "DeepSeek-V4.1-Flash-1017-GSQ-RCO-IQ1_M-00003-of-00004.gguf",
+      "size": 39997334720,
+      "git_oid": "f16fafc576aec4369e2af8e79c0abaa5f3808d67",
+      "sha256": "fb1dd52e9029400beb3457da7f819bbdd18eafe8a28eb12a8151db391bf0cd1e",
+      "sha256_source": "huggingface_lfs_oid",
+      "lfs_pointer_size": 136,
+      "xet_hash": "15c8f90d9fe1a2e68a911bba2b6bcd7522c91d1e2535eb9ea589f9c202f91f43",
+      "kind": "gguf_shard"
+    },
+    {
+      "path": "DeepSeek-V4.1-Flash-1017-GSQ-RCO-IQ1_M-00004-of-00004.gguf",
+      "size": 2188841824,
+      "git_oid": "a5c114ae97db188557d1faea3bfa801e0862f0f1",
+      "sha256": "25eb979db1aac9da8d9f8603fbc99694e361d2526440df71433f7242e0342e98",
+      "sha256_source": "huggingface_lfs_oid",
+      "lfs_pointer_size": 135,
+      "xet_hash": "d1aace230527b15effcb2d9e11275973ecc759a4e54b491d1515d1d8c8eddbf1",
+      "kind": "gguf_shard"
+    },
+    {
+      "path": "DeepSeek-V4.1-Flash-1017-GSQ-RCO-IQ2_XS-00001-of-00004.gguf",
+      "size": 39535776992,
+      "git_oid": "577f9a82f8dbde6e83a857122c95e1e674cbebd1",
+      "sha256": "4c65307992ab586c527ca1f6f64062aa96a33b23c02b7fed103f45f75e854798",
+      "sha256_source": "huggingface_lfs_oid",
+      "lfs_pointer_size": 136,
+      "xet_hash": "598c32d6825b077420ca525f8c6cf0870ec2d1f4ecab39ca85a2b0907b276779",
+      "kind": "gguf_shard"
+    },
+    {
+      "path": "DeepSeek-V4.1-Flash-1017-GSQ-RCO-IQ2_XS-00002-of-00004.gguf",
+      "size": 39494617536,
+      "git_oid": "180729febe94ae0a2aab90204e74daedd724e330",
+      "sha256": "933461a974fcccee741bf2f9798201e72ab4aa3f8a952be56f849896ca6ea30e",
+      "sha256_source": "huggingface_lfs_oid",
+      "lfs_pointer_size": 136,
+      "xet_hash": "d2652e73e22c9be879d319c8e7300393deb183a9bbb03cb97b748d8f37095d9d",
+      "kind": "gguf_shard"
+    },
+    {
+      "path": "DeepSeek-V4.1-Flash-1017-GSQ-RCO-IQ2_XS-00003-of-00004.gguf",
+      "size": 39423838496,
+      "git_oid": "f248b18230bad4137a06f3d3ff2dd09e954ccf30",
+      "sha256": "bbf91fa346a85ebaf32dd4fd5c456b534d780d381e54f46ac90783a481373240",
+      "sha256_source": "huggingface_lfs_oid",
+      "lfs_pointer_size": 136,
+      "xet_hash": "6ead44a8c48de60f7597251bb532c7c400fe3898aaf7744ef62ccc17e7bb6afe",
+      "kind": "gguf_shard"
+    },
+    {
+      "path": "DeepSeek-V4.1-Flash-1017-GSQ-RCO-IQ2_XS-00004-of-00004.gguf",
+      "size": 36771591232,
+      "git_oid": "324c138bc75b17618b5f9709d79a5d87f03d1643",
+      "sha256": "18305a5afbf8087e1f88a9f2978cc74650357f482629d346349ed374cb7c8451",
+      "sha256_source": "huggingface_lfs_oid",
+      "lfs_pointer_size": 136,
+      "xet_hash": "d32a9ed74d0cc3899f98cc13966e871cbdffe12387c1142fdc13044c7b8eccd5",
+      "kind": "gguf_shard"
+    },
+    {
+      "path": "DeepSeek-V4.1-Flash-1017-GSQ-RCO-IQ2_XXS-00001-of-00004.gguf",
+      "size": 39075714624,
+      "git_oid": "431e207dba3bd7836efce0bc513b3826c5b5bd00",
+      "sha256": "d46efb67ccffd8fb5d7f18b423896381b9e06d8491e161c370ddf3b05b07e050",
+      "sha256_source": "huggingface_lfs_oid",
+      "lfs_pointer_size": 136,
+      "xet_hash": "3201921c25818bcfafef37c6e0a841c16f7087af7966526890a2ab144a209045",
+      "kind": "gguf_shard"
+    },
+    {
+      "path": "DeepSeek-V4.1-Flash-1017-GSQ-RCO-IQ2_XXS-00002-of-00004.gguf",
+      "size": 39388449504,
+      "git_oid": "7478aa39b044c32d5177ab80393e6c337f5696b5",
+      "sha256": "cec1b2c3da429dc768b8bb9bc4dc4403d81f74d34db660a6a34ee3e555bf2c70",
+      "sha256_source": "huggingface_lfs_oid",
+      "lfs_pointer_size": 136,
+      "xet_hash": "70727f114f4b48fabfa4c37af8a50cd7dcb125ed6134ba1904475b22ef11710d",
+      "kind": "gguf_shard"
+    },
+    {
+      "path": "DeepSeek-V4.1-Flash-1017-GSQ-RCO-IQ2_XXS-00003-of-00004.gguf",
+      "size": 39246891616,
+      "git_oid": "ba9a393fdb7a3ead46dab027c3a0aa557acd547a",
+      "sha256": "9d9c2140fcb134a0b9a74dedd0e5167e68077af6d08ce7f856bce112f0a35dd3",
+      "sha256_source": "huggingface_lfs_oid",
+      "lfs_pointer_size": 136,
+      "xet_hash": "69ed526336e3098fc0a1c1f15ff5ad456c6327c4d61ce628ae1105488b7eea08",
+      "kind": "gguf_shard"
+    },
+    {
+      "path": "DeepSeek-V4.1-Flash-1017-GSQ-RCO-IQ2_XXS-00004-of-00004.gguf",
+      "size": 20527837312,
+      "git_oid": "0e7a55732a4b0f440ffd06cef78607355a2d77d8",
+      "sha256": "92e1b7aac2c27451977f093b89207a877221bba909424309450420f66fa42bf9",
+      "sha256_source": "huggingface_lfs_oid",
+      "lfs_pointer_size": 136,
+      "xet_hash": "43ef4b67d9b549a07dbe3d34f7bf08908d95efecd50a8c4a5967d1571420423c",
+      "kind": "gguf_shard"
+    },
+    {
+      "path": "LICENSE",
+      "size": 1084,
+      "git_oid": "d62e3bef9f054f21b7fc616365850fbf879a99ff",
+      "sha256": "f2c6c602815669d292889e5be8c802f2ed950653b77999b1584e8e6aed25d040",
+      "sha256_source": "computed_from_bytes_served_at_pinned_revision",
+      "xet_hash": null,
+      "kind": "license",
+      "git_blob_sha1_verified": true
+    },
+    {
+      "path": "README.md",
+      "size": 6801,
+      "git_oid": "160420a94d06802dbf0131c63aefba276cdf0b06",
+      "sha256": "7830f85bd627771d18594f616acd117ef0c79dece8dbac4f8c3f88bd3c151a6d",
+      "sha256_source": "computed_from_bytes_served_at_pinned_revision",
+      "xet_hash": null,
+      "kind": "model_card",
+      "git_blob_sha1_verified": true
+    },
+    {
+      "path": "cards/rungs.json",
+      "size": 1297,
+      "git_oid": "23f96d807b81f811307ba1af82e0fbff23c7482f",
+      "sha256": "b7804b03f18de8fe5dee3f2fd24b2f10983d0bd4e3b89b3d26e77d4463acdb4d",
+      "sha256_source": "computed_from_bytes_served_at_pinned_revision",
+      "xet_hash": null,
+      "kind": "card_data",
+      "git_blob_sha1_verified": true
+    }
+  ],
+  "sets": {
+    "IQ1_M": {
+      "count": 4,
+      "bytes": 120721120256,
+      "shards": [
+        "DeepSeek-V4.1-Flash-1017-GSQ-RCO-IQ1_M-00001-of-00004.gguf",
+        "DeepSeek-V4.1-Flash-1017-GSQ-RCO-IQ1_M-00002-of-00004.gguf",
+        "DeepSeek-V4.1-Flash-1017-GSQ-RCO-IQ1_M-00003-of-00004.gguf",
+        "DeepSeek-V4.1-Flash-1017-GSQ-RCO-IQ1_M-00004-of-00004.gguf"
+      ]
+    },
+    "IQ2_XS": {
+      "count": 4,
+      "bytes": 155225824256,
+      "shards": [
+        "DeepSeek-V4.1-Flash-1017-GSQ-RCO-IQ2_XS-00001-of-00004.gguf",
+        "DeepSeek-V4.1-Flash-1017-GSQ-RCO-IQ2_XS-00002-of-00004.gguf",
+        "DeepSeek-V4.1-Flash-1017-GSQ-RCO-IQ2_XS-00003-of-00004.gguf",
+        "DeepSeek-V4.1-Flash-1017-GSQ-RCO-IQ2_XS-00004-of-00004.gguf"
+      ]
+    },
+    "IQ2_XXS": {
+      "count": 4,
+      "bytes": 138238893056,
+      "shards": [
+        "DeepSeek-V4.1-Flash-1017-GSQ-RCO-IQ2_XXS-00001-of-00004.gguf",
+        "DeepSeek-V4.1-Flash-1017-GSQ-RCO-IQ2_XXS-00002-of-00004.gguf",
+        "DeepSeek-V4.1-Flash-1017-GSQ-RCO-IQ2_XXS-00003-of-00004.gguf",
+        "DeepSeek-V4.1-Flash-1017-GSQ-RCO-IQ2_XXS-00004-of-00004.gguf"
+      ]
+    }
+  },
+  "totals": {
+    "all_files": 16,
+    "all_bytes": 414185849421,
+    "gguf_shards": 12,
+    "gguf_bytes": 414185837568,
+    "text_artifacts": 4,
+    "text_bytes": 11853,
+    "gguf_bytes_gb_decimal": 414.186
+  },
+  "external_dependencies": [
+    {
+      "path": "DeepSeek-V4.1-Flash-Engram-IQ4_NL.gguf",
+      "repo": "ISTA-DASLab/DeepSeek-V4.1-Flash-1017-GSQ-RCO-GGUF",
+      "revision": "cb02422c900d",
+      "size": 110595290816,
+      "sha256": "eb19f30d368d393784e1fc54fdfaffc427ebb2110bf3762fdf5a8fbb9a2d740a",
+      "required": true,
+      "note": "External dependency: publisher states it is not re-hosted in this repo; required to load the model."
+    }
+  ],
+  "mirror_state": {
+    "local_gguf_present": 0,
+    "note": "No shards were downloaded during the audit (range requests only, max 8 MiB per shard). This manifest defines the expected state a mirror must match."
+  }
+}

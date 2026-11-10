@@ -1,0 +1,69 @@
+name: verify
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  manifests:
+    name: pinned manifest is still true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Acceptance manifest matches the Hub at the pinned revisions
+        run: python manifests/build_acceptance.py --check
+      - name: Manifest is valid JSON with the expected shape
+        run: |
+          python - <<'PY'
+          import json, sys
+          d = json.load(open('manifests/acceptance.json'))
+          assert d['schema'].startswith('dsh.library.acceptance'), d['schema']
+          files = [f for s in d['sources'] for f in s['files']]
+          assert len(files) == 16, len(files)
+          total = sum(f['bytes'] for f in files)
+          assert total == 378_510_219_098, total   # 352.52 GiB
+          print(f"ok: {len(files)} files, {total/2**30:.1f} GiB")
+          PY
+
+  scripts:
+    name: python tooling compiles and its CLI works
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m py_compile manifests/build_acceptance.py scripts/*.py configs/*.py Tools/runtime/bench.py
+      - name: verifier refuses an empty library honestly
+        run: |
+          mkdir -p /tmp/empty
+          python scripts/verify_library.py --dir /tmp/empty --no-progress --no-report || code=$?
+          test "${code:-0}" -eq 2
+
+  shell:
+    name: cloud provisioning script parses
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash -n cloud/provision.sh && echo "bash -n ok"
+
+  powershell:
+    name: runtime scripts parse
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - shell: pwsh
+        run: |
+          $failed = 0
+          Get-ChildItem Tools -Recurse -Filter *.ps1 | ForEach-Object {
+            $errors = $null
+            [void][System.Management.Automation.Language.Parser]::ParseFile($_.FullName, [ref]$null, [ref]$errors)
+            if ($errors) { $failed++; Write-Host "FAIL $($_.Name)"; $errors | ForEach-Object { Write-Host "  $_" } }
+            else { Write-Host "ok   $($_.Name)" }
+          }
+          if ($failed) { exit 1 }
