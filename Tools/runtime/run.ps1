@@ -44,11 +44,11 @@ if (-not $Force -and $bestVram -lt 7.5) {
 
 # --- presets ----------------------------------------------------------------
 $presets = @{
-  nuclear    = @('--context','1m','--speed','full','--parallel','8','--vision','on','--kv','int8','--tune','thorough')
+  nuclear    = @('--context','1m','--speed','full','--parallel','8','--vision','on','--kv','int8','--tune','thorough','--set','prefill=65536')
   balanced   = @('--context','128k','--speed','full','--parallel','4','--vision','off','--kv','int8','--tune','quick')
   code       = @('--context','64k','--speed','full','--parallel','2','--vision','off','--kv','q4_0','--tune','skip')
   smoke      = @('--context','8k','--speed','faster','--parallel','1','--vision','off','--kv','q4_0','--tune','skip')
-  throughput = @('--context','32k','--speed','full','--parallel','8','--vision','off','--kv','int8','--tune','skip','--dspark','on','--drafting','dflash2')
+  throughput = @('--context','32k','--speed','full','--parallel','8','--vision','off','--kv','int8','--tune','skip','--dspark','on','--drafting','dflash2','--set','prefill=32768')
   custom     = @()
 }
 $args = @('launch','--family','deepseek41','--model',$ModelId,'--access',$Access,'--port',$Port)

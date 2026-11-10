@@ -109,6 +109,31 @@ translates to OpenAI `tool_calls` and Anthropic `tool_use`, including streamed a
 `tool_choice`, and calls written inside the thinking block. A parameter marked
 `string="true"` stays a string — do not re-parse JSON-looking strings.
 
+## Offload and engine settings (`--set`)
+
+`strata launch --set KEY=VALUE` passes an advanced engine setting or a `STRATA_*` variable
+straight through; unknown keys warn instead of refusing, so a typo is visible, not silent.
+The ones that matter for a 384-expert model:
+
+| Setting | Example | What it does |
+|---|---|---|
+| `prefill=<n>` | `--set prefill=65536` | bigger prompt chunks; the vendor writes `8192` on Strix Halo for 11–15% |
+| `ssd-cache=<GiB>` | `--set ssd-cache=108` | size of the RAM store for experts (auto-sized by default); a user report used 108 GiB on a 128 GB box |
+| `dspark=<word>` | `--set dspark=on` | same as `--dspark`; `dspark-conf=0.65` raised an RTX 4090 from 16–22 to ~40 tok/s |
+| `resident-experts` | `--set resident-experts=...` | keep a slice of experts permanently resident (higher memory, lower latency) |
+| `kv` | `--kv k8v4` | KV streaming variant; also `int8`, `q4_0`, `fp16` |
+
+Two more levers that are flags, not settings:
+
+- `--pool-cores 2-15:2` pins the CPU workers to named logical processors (one worker per physical
+  core by default; two entries on one core warn).
+- `--gpu-roles 1=main,0=helper` gives each card a job when there is more than one.
+
+Default expert placement is automatic: as many routed experts as fit in VRAM stay there, the rest
+are computed on the CPU from the model files, and whatever RAM cannot hold is read from the SSD.
+There is no supported "all experts on CPU" switch — the dense weights are still VRAM-resident, so
+VRAM is a gate, not a knob.
+
 ## Measure, don't guess
 
 ```powershell
