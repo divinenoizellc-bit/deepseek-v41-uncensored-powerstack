@@ -85,6 +85,8 @@ function Invoke-Hf([hashtable]$pin, [string[]]$include, [string]$What, [double]$
   if ($LASTEXITCODE -ne 0) { throw "hf download failed for $What (exit $LASTEXITCODE) - re-run to resume" }
   $mins = ((Get-Date) - $started).TotalMinutes
   Write-Host ("    done in {0:N0} min" -f $mins)
+  Clear-XetCache
+  Show-Progress
 }
 
 function Show-Progress {
@@ -92,6 +94,30 @@ function Show-Progress {
   $bytes = ($files | Measure-Object Length -Sum).Sum
   if (-not $bytes) { $bytes = 0 }
   Write-Host ("-- library: {0:N2} GiB in {1} files, {2:N1} GiB free" -f ($bytes/1GB), $files.Count, (Get-FreeGiB))
+}
+
+# hf-xet holds chunks in a cache while it assembles a 40 GB shard: peak usage is
+# roughly 2x the file. Once the file is renamed into place the chunks are dead
+# weight, so reclaim them - otherwise the full 352.5 GiB library needs ~700 GiB.
+function Clear-XetCache {
+  $caches = @(
+    (Join-Path $env:USERPROFILE '.cache\huggingface\xet'),
+    (Join-Path $env:LOCALAPPDATA 'huggingface\xet')
+  )
+  foreach ($c in $caches) {
+    if (Test-Path $c) {
+      $before = (Get-ChildItem $c -Recurse -File -Force -ErrorAction SilentlyContinue | Measure-Object Length -Sum).Sum
+      Get-ChildItem $c -Force -ErrorAction SilentlyContinue | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue
+      Write-Host ("  reclaimed {0:N2} GiB from {1}" -f ($before/1GB), $c)
+    }
+  }
+  # dead .incomplete / .lock files from interrupted runs
+  $dl = Join-Path $LibraryRoot '.cache\huggingface\download'
+  if (Test-Path $dl) {
+    Get-ChildItem $dl -File -Force -ErrorAction SilentlyContinue |
+      Where-Object { $_.Length -eq 0 -and ($_.Name -like '*.incomplete' -or $_.Name -like '*.lock') } |
+      Remove-Item -Force -ErrorAction SilentlyContinue
+  }
 }
 
 Write-Host "DeepSeek-V4.1-Flash-1017 uncensored power-stack :: library fetch"

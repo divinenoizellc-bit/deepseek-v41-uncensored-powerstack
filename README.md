@@ -87,12 +87,32 @@ scripts/
   index_library.py        build Library/index.json (portability verdict included)
   check_pins.py           re-query the Hub and fail loudly if a pinned file moved
   fetch.py                dependency-free resumable Range downloader (fallback to `hf`)
-Tools/runtime/            preflight · fetch · import · run presets · cloud kit
+Tools/runtime/            preflight · fetch · import · run presets · publish · cloud kit
+Tools/health/             check-all-tools.ps1 (end-to-end smoke test of every tool on the box)
 Tools/harden/             Windows hardening + installer verification (see Docs/vpn-av)
 configs/                  launch presets, OpenAI/Anthropic client examples
 Docs/security/            SECURITY_AUDIT.md · THIRD_PARTY_BINARIES.md
 Docs/library/             HARDWARE.md · POWER.md · RUNBOOK.md · PROVENANCE.md
+cloud/                    provision.sh for a rented GPU + cost math
 ```
+
+### Disk, while acquiring
+
+`hf-xet` stages chunks while it assembles a 40 GB shard, so peak usage is roughly **2× the
+file being written**. `fetch-library.ps1` reclaims the chunk cache after every file and refuses
+to start a set that would leave less than 40 GiB free. Budget ~352.5 GiB for the library and
+let it hold the peak; do not run two sets at once.
+
+### Publishing this repo (never the weights)
+
+```powershell
+pwsh -File .\Tools\runtime\publish.ps1 -Target both -DryRun   # checks auth, pushes nothing
+pwsh -File .\Tools\runtime\publish.ps1 -Target github         # needs: gh auth login
+pwsh -File .\Tools\runtime\publish.ps1 -Target hf-dataset     # needs: hf auth login
+```
+
+The script refuses to publish if a tracked file is larger than 50 MB — the weights stay in
+their own repos at the pins above, and this repository ships the proof, not the payload.
 
 ## Limits, stated plainly
 
