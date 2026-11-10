@@ -127,6 +127,8 @@ Show-Progress
 if ($Set -in @('all','shared')) {
   # 1. mmproj (vision tower) + the metadata shard pack_gguf --engram-meta reads
   Invoke-Hf $PINS.Unsloth @('mmproj-BF16.gguf','UD-Q8_K_XL/DeepSeek-V4.1-Flash-1017-UD-Q8_K_XL-00001-of-00009.gguf') 'shared support files (vision tower + engram metadata)' 1.0
+  # 1b. the four text artifacts the manifest pins (license, card, rungs, attributes)
+  Invoke-Hf $PINS.Uncensored @('.gitattributes','LICENSE','README.md','cards/*') 'text artifacts (license, card, rung scorecard)' 0.01
 }
 
 if ($Set -in @('all','IQ2_XXS')) {
