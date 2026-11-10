@@ -164,11 +164,13 @@ def main() -> int:
         if not out.exists():
             print(f"FAIL: {out} does not exist")
             return 1
+        # a weight file is pinned by LFS sha256; a text file by its git blob sha1
+        def pin_id(f):
+            return (f["bytes"], f.get("sha256") or f.get("blob_sha1"))
+
         old = json.loads(out.read_text(encoding="utf-8"))
-        old_map = {(s["repo"], f["path"]): (f["bytes"], f["sha256"])
-                   for s in old["sources"] for f in s["files"]}
-        new_map = {(s["repo"], f["path"]): (f["bytes"], f["sha256"])
-                   for s in sources for f in s["files"]}
+        old_map = {(s["repo"], f["path"]): pin_id(f) for s in old["sources"] for f in s["files"]}
+        new_map = {(s["repo"], f["path"]): pin_id(f) for s in sources for f in s["files"]}
         drift = [k for k in sorted(set(old_map) | set(new_map)) if old_map.get(k) != new_map.get(k)]
         if drift:
             print("FAIL: Hub drift detected on the pinned revisions:")
