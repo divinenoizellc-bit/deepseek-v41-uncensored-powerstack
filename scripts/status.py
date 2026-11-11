@@ -119,6 +119,20 @@ def main() -> int:
         '39.4 GiB RAM. The library is portable: copy it to a machine with a real card, re-run',
         '`scripts/verify_library.py`, then `Tools/runtime/import-verified.ps1`.',
         '',
+    ]
+
+    pending = [g for g in groups if g['state'] != 'complete']
+    if pending:
+        need = sum(g['bytes'] for g in pending)
+        lines += [
+            f'**Not installed: {pending[0]["name"]} ({human(need)}).** It needs roughly '
+            f'{human(need)} free plus 40 GiB headroom; {human(free)} is free now.',
+            'To finish it after freeing space: `pwsh -File Tools/runtime/fetch-library.ps1 -Set '
+            + pending[0]['name'] + '`',
+            '',
+        ]
+
+    lines += [
         'Hashes are not evidence of freshness: run `python scripts/verify_library.py` for the',
         'byte-level verdict, and `python scripts/gguf_probe.py --library` for the headers.',
         '',

@@ -42,7 +42,23 @@ Pins involved (all from the Hub's own LFS metadata):
 Run outcome is recorded in the commit that follows it; the verifier exits `0` only when every
 present file matches, `2` while sets are still incomplete, `1` on a mismatch.
 
-## 3. Library state
+## 3. IQ2_XXS rung — 4/4 shards PASS
+
+`python scripts/verify_library.py --only "IQ2_XXS"` streamed all 128.75 GiB and matched every
+LFS SHA-256 exactly (2026-11-10T00:34Z report):
+
+| Shard | GiB | SHA-256 (prefix) | Seconds | MB/s |
+|---|---:|---|---:|---:|
+| `…-IQ2_XXS-00001-of-00004.gguf` | 36.39 | `d46efb67ccffd8fb` | 414.1 | 94.4 |
+| `…-IQ2_XXS-00002-of-00004.gguf` | 36.68 | `cec1b2c3da429dc7` | 394.2 | 99.9 |
+| `…-IQ2_XXS-00003-of-00004.gguf` | 36.55 | `9d9c2140fcb134a0` | 365.7 | 107.3 |
+| `…-IQ2_XXS-00004-of-00004.gguf` | 19.12 | `92e1b7aac2c27451` | 151.8 | 135.3 |
+
+Shard 4 is the interesting one: it is the shard the abliteration rewrote, so its hash is the
+uncensored pin, not ISTA's; shards 1–3 are byte-identical to ISTA's originals. That is exactly
+the pattern the security audit predicted from the remote tree.
+
+## 4. Library state
 
 Updated as sets land; the authoritative machine-readable version is `Library/index.json`
 (written by `scripts/index_library.py`).

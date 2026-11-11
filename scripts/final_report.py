@@ -45,10 +45,26 @@ def human(n: float) -> str:
     return f"{n} B"
 
 
+def in_scope(path: str, scope: str) -> bool:
+    """Which pinned files the declared scope requires.
+
+    `IQ2_XXS` = the 2.00 bpw rung plus every shared file (Engram, drafter, vision tower,
+    packer metadata, text artifacts). IQ1_M is a second, optional rung: same shared files,
+    lower quality, and it does not fit on a volume that is already 68% of the way to full.
+    """
+    if not scope:
+        return True
+    shared = ('Engram', 'dspark', 'mmproj', 'UD-Q8_K_XL', '.gitattributes', 'LICENSE', 'README.md', 'rungs.json')
+    if any(s in path for s in shared):
+        return True
+    return scope.lower() in path.lower()
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument('--verify', action='store_true', help='run verify_library.py first')
     ap.add_argument('--allow-incomplete', action='store_true')
+    ap.add_argument('--scope', default='', help='treat only these rungs (+ shared files) as required')
     ap.add_argument('--library', default=LIBRARY)
     args = ap.parse_args()
 
@@ -69,13 +85,20 @@ def main() -> int:
 
     files = verify.get('files', [])
     totals = verify.get('totals', {})
+    required = [f for f in files if in_scope(f.get('filename', ''), args.scope)]
+    deferred = [f for f in files if f not in required]
+    req_ok = all(f.get('status') == 'PASS' for f in required)
     complete = (verify.get('verdict') == 'PASS'
                 and totals.get('filesExpected') == totals.get('filesChecked')
                 and totals.get('missing', 0) == 0)
-    if not complete and not args.allow_incomplete:
+    scoped_complete = (args.scope and req_ok
+                       and all(f.get('status') in ('PASS', 'MISSING') for f in files)
+                       and not any(f.get('status') in ('FAIL', 'INCOMPLETE') for f in required))
+    if not (complete or scoped_complete) and not args.allow_incomplete:
         print(f"REFUSING to write a completion report: verdict={verify.get('verdict')} "
-              f"checked={totals.get('filesChecked')}/{totals.get('filesExpected')}. "
-              f"Use --allow-incomplete for a progress snapshot.", file=sys.stderr)
+              f"checked={totals.get('filesChecked')}/{totals.get('filesExpected')}"
+              + (f" scope={args.scope}" if args.scope else '')
+              + ". Use --allow-incomplete for a progress snapshot.", file=sys.stderr)
         return 1
 
     # GGUF headers, locally
@@ -91,10 +114,12 @@ def main() -> int:
                     probes.append({'path': os.path.join(root, n), 'error': str(exc)})
 
     now = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+    state = ('COMPLETE' if complete else ('COMPLETE FOR SCOPE' if scoped_complete else 'INCOMPLETE snapshot'))
     L = [
         '# Final report — DeepSeek-V4.1-Flash-1017 Uncensored power stack',
         '',
-        f'Generated **{now}** by `scripts/final_report.py`.',
+        f'Generated **{now}** by `scripts/final_report.py`.  **State: {state}**'
+        + (f' (scope: `{args.scope}`, {len(required)} required files)' if args.scope else ''),
         '',
         '## Verdict',
         '',
@@ -118,6 +143,17 @@ def main() -> int:
         act = (f.get('actualSha256') or f.get('actualBlobSha1') or '')[:16]
         L.append(f"| `{os.path.basename(f.get('filename', ''))}` | "
                  f"{f.get('expectedBytes', 0):,} | **{f.get('status')}** | `{exp}` | `{act}` |")
+
+    if deferred:
+        L += ['', '## Deferred (out of declared scope)', '',
+              'These pins are known, correct, and deliberately not installed yet:', '']
+        for f in deferred:
+            if f.get('status') != 'PASS':
+                L.append(f"- `{os.path.basename(f.get('filename', ''))}` — {f.get('status')}")
+        L += ['', '`IQ1_M` is the smaller 1.75 bpw rung. It reads the same Engram table, so installing it',
+              'would add only 112.4 GiB — but that needs ~152 GiB free and the volume has 121 GiB.',
+              'To finish it later: free ≥ 40 GiB (e.g. remove a stale 196 GiB EXL3 folder), then',
+              '', '```powershell', 'pwsh -File Tools/runtime/fetch-library.ps1 -Set IQ1_M', '```', '']
 
     L += ['', '## GGUF headers (parsed on disk)', '',
           '| File | GiB | Tensors | Architecture | Notes |', '|---|---:|---:|---|---|']
