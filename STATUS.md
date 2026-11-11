@@ -1,8 +1,8 @@
 # Acquisition status
 
-Generated 2026-11-11T00:34:17Z by `scripts/status.py`.
+Generated 2026-11-11T01:12:01Z by `scripts/status.py`.
 
-**12/16 files · 68.11% · 240.08 GiB of 352.52 GiB** · free disk 120.67 GiB
+**12/16 files · 68.11% · 240.08 GiB of 352.52 GiB** · free disk 122.19 GiB
 
 | Component | Files | Complete | Size | State |
 |---|---:|---:|---:|---|
@@ -18,7 +18,7 @@ Generated 2026-11-11T00:34:17Z by `scripts/status.py`.
 39.4 GiB RAM. The library is portable: copy it to a machine with a real card, re-run
 `scripts/verify_library.py`, then `Tools/runtime/import-verified.ps1`.
 
-**Not installed: IQ1_M (112.43 GiB).** It needs roughly 112.43 GiB free plus 40 GiB headroom; 120.67 GiB is free now.
+**Not installed: IQ1_M (112.43 GiB).** It needs roughly 112.43 GiB free plus 40 GiB headroom; 122.19 GiB is free now.
 To finish it after freeing space: `pwsh -File Tools/runtime/fetch-library.ps1 -Set IQ1_M`
 
 Hashes are not evidence of freshness: run `python scripts/verify_library.py` for the

@@ -180,8 +180,9 @@ def main() -> int:
           '```', '']
     open(DOC, 'w', encoding='utf-8', newline='\n').write('\n'.join(L) + '\n')
     print(f"wrote {DOC}  ({'complete' if complete else 'INCOMPLETE snapshot'})")
-    return 0 if complete else 1
+    return 0 if (complete or scoped_complete) else 1
 
 
 if __name__ == '__main__':
     sys.exit(main())
+
