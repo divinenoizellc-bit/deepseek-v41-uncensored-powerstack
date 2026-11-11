@@ -62,6 +62,11 @@ pwsh -File .\Tools\runtime\import-verified.ps1
 pwsh -File .\Tools\runtime\run.ps1 -Preset nuclear
 ```
 
+**If the volume cannot hold all 352.5 GiB**, the fetch script refuses the set that does not fit
+instead of filling the disk. Priority order is fixed: shared files → IQ2_XXS (2.00 bpw, the rung
+that passed every gate) → IQ1_M (1.75 bpw, optional). What is installed and what is deferred is
+always written to [`STATUS.md`](STATUS.md), with the exact one-line command to finish the rest.
+
 ## Why two rungs and not three
 
 `cards/rungs.json` is the publisher's own scorecard. IQ2_XS (2.25 bpw) is published with
