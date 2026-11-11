@@ -63,6 +63,21 @@ That script verifies hashes first, then hands the folder to Strata with `--model
 > refuses the set, use the packer directly:
 > `python tools/dsv41/pack_gguf.py --model <dir> --out <pack> --engram DeepSeek-V4.1-Flash-Engram-IQ4_NL.gguf --engram-meta UD-Q8_K_XL/DeepSeek-V4.1-Flash-1017-UD-Q8_K_XL-00001-of-00009.gguf`
 > from the Strata checkout.
+>
+> **Measured, not assumed** — `strata models import --plan <library>` on the finished library says:
+>
+> ```
+> 5 GGUF file(s): plausible
+> These files are Strata's deepseek41 IST-DAS-2.00bpw.
+> Prepared files found beside it: picture reader.
+> Adoption: requires_name_size_sha256_and_engine_checks
+> No files changed
+> ```
+>
+> So the layout, the split, the Engram and the vision tower are all recognised as the right model;
+> the only remaining gate is the hash check (`requires_name_size_sha256_and_engine_checks`), which
+> is where shard 4's abliterated hash differs from ISTA's pin. That is the expected behaviour of an
+> edited set, not a packaging error.
 
 ### B4. Launch
 
