@@ -1,5 +1,8 @@
 # DeepSeek-V4.1-Flash-1017 · Uncensored · Power Stack
 
+[![verify](https://github.com/divinenoizellc-bit/deepseek-v41-uncensored-powerstack/actions/workflows/verify.yml/badge.svg)](https://github.com/divinenoizellc-bit/deepseek-v41-uncensored-powerstack/actions/workflows/verify.yml)
+[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 **A verified, pinned, hardware-honest mirror + launcher for one specific model:**
 [`AtomicChat/DeepSeek-V4.1-Flash-1017-Uncensored-GSQ-RCO-GGUF`](https://huggingface.co/AtomicChat/DeepSeek-V4.1-Flash-1017-Uncensored-GSQ-RCO-GGUF)
 — 551,880,949,208 parameters, 384 experts, 1,048,576-token context, MIT weights, with
@@ -137,4 +140,5 @@ their own repos at the pins above, and this repository ships the proof, not the 
 Tooling and documentation in this repository: **MIT** ([`LICENSE`](LICENSE)). Model weights:
 MIT, copyright DeepSeek, redistributed by ISTA-DASLab and AtomicChat — see [`NOTICE`](NOTICE)
 and [`Docs/library/PROVENANCE.md`](Docs/library/PROVENANCE.md).
+
 
