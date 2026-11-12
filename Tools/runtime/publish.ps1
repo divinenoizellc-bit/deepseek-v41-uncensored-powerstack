@@ -15,7 +15,10 @@
 #>
 [CmdletBinding(SupportsShouldProcess)]
 param(
-  [ValidateSet('github', 'hf-dataset', 'both')]
+  # Deliberately not [ValidateSet]: a hyphen pasted from a rendered page is often
+  # U+2011 or U+2013, which looks identical and fails ValidateSet with a message that
+  # reads "hf-dataset does not belong to the set github,hf-dataset,both". The target is
+  # normalised below instead, so any dash works.
   [string]$Target = 'github',
   [string]$Repo = 'deepseek-v41-uncensored-powerstack',
   [string]$Name = 'deepseek-v41-uncensored-pins',
@@ -26,6 +29,20 @@ param(
 
 $ErrorActionPreference = 'Stop'
 if (-not $ProjectRoot) { $ProjectRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot) }
+
+function Resolve-Target([string]$raw) {
+  if (-not $raw) { return 'github' }
+  $n = $raw.Trim().ToLowerInvariant()
+  $n = $n -replace '[\u2010-\u2015\u2212\uFE58\uFE63\uFF0D]', '-'   # any unicode dash
+  $n = $n -replace '[\u200B-\u200D\uFEFF]', ''                       # zero-width paste artifacts
+  switch -Regex ($n) {
+    '^(github|gh)$' { return 'github' }
+    '^(hf|huggingface|hf-dataset|dataset)$' { return 'hf-dataset' }
+    '^(both|all)$' { return 'both' }
+    default { throw "unknown -Target '$raw'. Use: github, hf-dataset, both (dashes may be any kind)." }
+  }
+}
+$Target = Resolve-Target $Target
 Push-Location $ProjectRoot
 try {
   Write-Host 'DeepSeek-V4.1-Flash-1017 power stack :: publish' -ForegroundColor Cyan
@@ -100,7 +117,9 @@ try {
     Write-Host 'Hugging Face dataset (manifests + audit, no weights):' -ForegroundColor Cyan
     $who = (& $hf auth whoami 2>&1)
     if ($LASTEXITCODE -ne 0) {
-      Write-Host '  not authenticated. Run: hf auth login' -ForegroundColor Yellow
+      Write-Host '  not authenticated. Two ways, neither has a timeout:' -ForegroundColor Yellow
+      Write-Host '    1) hf auth login --token hf_xxx   (token needs WRITE scope)' -ForegroundColor Yellow
+      Write-Host '    2) $env:HF_TOKEN = "hf_xxx"       (then re-run this script in the same shell)' -ForegroundColor Yellow
     } else {
       $user = ($who | Select-Object -First 1) -replace '\s.*$', ''
       Write-Host "  authenticated as: $user"
@@ -125,4 +144,5 @@ try {
   Write-Host 'done. Nothing was published if a precondition above is still yellow.' -ForegroundColor DarkGray
 }
 finally { Pop-Location }
+
 
