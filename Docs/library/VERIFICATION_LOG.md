@@ -81,3 +81,40 @@ python scripts\gguf_probe.py --library
 python scripts\verify_library.py
 python scripts\check_pins.py
 ```
+
+## 6. IQ1_M rung — 4/4 shards PASS (library complete)
+
+`python scripts/verify_library.py` (full run, 2026-11-12T02:51Z report) streamed all
+352.52 GiB and matched every LFS SHA-256:
+
+| Shard | GiB | SHA-256 (prefix) | Seconds | MB/s |
+|---|---:|---|---:|---:|
+| `…-IQ1_M-00001-of-00004.gguf` | 36.66 | `6e3f0d5ff53d0042` | 344.5 | 114.3 |
+| `…-IQ1_M-00002-of-00004.gguf` | 36.49 | `34d68c99fdae9948` | 267.4 | 146.5 |
+| `…-IQ1_M-00003-of-00004.gguf` | 37.25 | `fb1dd52e9029400b` | 302.4 | 132.3 |
+| `…-IQ1_M-00004-of-00004.gguf` | 2.04 | `25eb979db1aac9da` | 7.7 | 283.8 |
+
+Final per-set verdict, same run:
+
+| Set | Files | Expected | Present | Verdict |
+|---|---|---:|---:|---|
+| IQ1_M | 4/4 | 112.43 GiB | 112.43 GiB | **PASS** |
+| IQ2_XXS | 4/4 | 128.75 GiB | 128.75 GiB | **PASS** |
+| Engram | 1/1 | 103.00 GiB | 103.00 GiB | **PASS** |
+| drafter | 1/1 | 7.43 GiB | 7.43 GiB | **PASS** |
+| meta shard | 1/1 | 0.01 GiB | 0.01 GiB | **PASS** |
+| mmproj | 1/1 | 0.91 GiB | 0.91 GiB | **PASS** |
+| text | 4/4 | 11.58 KiB | 11.58 KiB | **PASS** |
+
+**Summary: PASS 16, FAIL 0, INCOMPLETE 0, MISSING 0 — 352.52 GiB of 352.52 GiB
+hash-verified.** `scripts/index_library.py` therefore reports `portable: true`, and
+`scripts/final_report.py` writes its completion report with exit code 0.
+
+Two operational notes from finishing the set:
+
+- `hf-xet` stages roughly 2x the file it is assembling, so the volume needs the extra
+  headroom during a set. IQ1_M was fetched over plain HTTPS instead (1x peak), which is
+  why its log line says "direct HTTPS".
+- Two overlapping fetch runs collided on a shared log file and one exited 1 *after* its
+  download completed. Logs are now per-run (`fetch-library-<timestamp>.log`); the data
+  was never affected.

@@ -88,7 +88,7 @@ def main() -> int:
     required = [f for f in files if in_scope(f.get('filename', ''), args.scope)]
     deferred = [f for f in files if f not in required]
     req_ok = all(f.get('status') == 'PASS' for f in required)
-    complete = (verify.get('verdict') == 'PASS'
+    complete = (str(verify.get('verdict', '')).upper() == 'PASS'
                 and totals.get('filesExpected') == totals.get('filesChecked')
                 and totals.get('missing', 0) == 0)
     scoped_complete = (args.scope and req_ok
@@ -185,4 +185,5 @@ def main() -> int:
 
 if __name__ == '__main__':
     sys.exit(main())
+
 
