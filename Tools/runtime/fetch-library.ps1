@@ -78,7 +78,7 @@ function Invoke-Hf([hashtable]$pin, [string[]]$include, [string]$What, [double]$
   if ($DryRun) { return }
 
   $started = Get-Date
-  $logPath = Join-Path $logDir 'fetch-library.log'
+  $logPath = Join-Path $logDir ("fetch-library-" + (Get-Date -Format 'yyyyMMddTHHmmss') + ".log")
   # A native tool that writes a hint to stderr is not a failure. With
   # $ErrorActionPreference='Stop', PowerShell 5.1 turns that stderr line into a
   # terminating NativeCommandError, which is exactly how the first IQ1_M run died
@@ -172,3 +172,4 @@ if ($Set -in @('all','IQ1_M')) {
 
 Show-Progress
 Write-Host 'verify with:  python scripts\verify_library.py'
+
