@@ -78,11 +78,23 @@ function Invoke-Hf([hashtable]$pin, [string[]]$include, [string]$What, [double]$
   if ($DryRun) { return }
 
   $started = Get-Date
-  & hf @args 2>&1 | ForEach-Object {
-    if ($_ -match 'Fetching|Downloading|\.part|it/s|B/s|Error') { Write-Host "    $_" }
-    $_
-  } | Out-File -Append -Encoding utf8 (Join-Path $logDir 'fetch-library.log')
-  if ($LASTEXITCODE -ne 0) { throw "hf download failed for $What (exit $LASTEXITCODE) - re-run to resume" }
+  $logPath = Join-Path $logDir 'fetch-library.log'
+  # A native tool that writes a hint to stderr is not a failure. With
+  # $ErrorActionPreference='Stop', PowerShell 5.1 turns that stderr line into a
+  # terminating NativeCommandError, which is exactly how the first IQ1_M run died
+  # ("Hint: the hf-cli skill is not installed") before downloading a single byte.
+  $prevEap = $ErrorActionPreference
+  $ErrorActionPreference = 'Continue'
+  try {
+    & hf @args 2>> $logPath | ForEach-Object {
+      if ($_ -match 'Fetching|Downloading|\.part|it/s|B/s|Error') { Write-Host "    $_" }
+      $_ | Out-File -Append -Encoding utf8 $logPath
+    }
+    $exit = $LASTEXITCODE
+  } finally {
+    $ErrorActionPreference = $prevEap
+  }
+  if ($exit -ne 0) { throw "hf download failed for $What (exit $exit) - re-run to resume" }
   $mins = ((Get-Date) - $started).TotalMinutes
   Write-Host ("    done in {0:N0} min" -f $mins)
   Clear-XetCache

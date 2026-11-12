@@ -412,7 +412,7 @@ if ($Revert) {
                     }
                     else {
                         if (-not (Test-Path -LiteralPath $entry.Path)) {
-                            $null = New-Item -LiteralPath $entry.Path -Force
+                            $null = New-Item -Path $entry.Path -Force
                         }
                         Set-ItemProperty -LiteralPath $entry.Path -Name $entry.Name -Value $entry.Previous -Type $entry.PreviousType
                     }
@@ -522,6 +522,15 @@ Set-Step -Area 'Preference' -Item 'DisableBlockAtFirstSeen' `
     -Action { Set-MpPreference -DisableBlockAtFirstSeen $false }
 
 Write-Section ("Attack Surface Reduction rules (profile: {0})" -f $Profile)
+# Set-MpPreference REPLACES the entire ASR rule set on every call. Writing one rule
+# per call therefore leaves exactly one rule configured - which is what happened on
+# the first real run here (count=1). Each step writes the cumulative plan instead, so
+# the final state is all rules at once while per-rule logging and the summary stay.
+# The cloud warning is computed once, outside the closure: .GetNewClosure() runs in a
+# new scope where this script's functions (Get-MpProp) are not visible.
+$allRuleIds = @($asrPlan | ForEach-Object { $_.Id })
+$allRuleActs = @($asrPlan | ForEach-Object { [int]$_.Desired })
+$cloudOff = ((Get-MpProp (Get-MpPreference) 'MAPSReporting') -eq 0)
 foreach ($rule in $asrPlan) {
     $key = $rule.Id.ToLowerInvariant()
     $has = $curAsr.ContainsKey($key)
@@ -529,15 +538,14 @@ foreach ($rule in $asrPlan) {
     $label = $rule.Name
     if ($rule.DevRisk) { $label = $label + ' [dev-risk]' }
     $rid = $rule.Id
-    $want = $rule.Desired
-    $needsCloud = $rule.NeedsCloud
+
+    if ($rule.NeedsCloud -and $cloudOff) {
+        Write-Warning ("{0} depends on cloud-delivered protection; enable MAPSReporting=2 too." -f $rid)
+    }
 
     Set-Step -Area 'ASR' -Item $label -Current $currentName -Target $rule.DesiredName -ApplyNow:$applyNow `
         -Action {
-        Set-MpPreference -AttackSurfaceReductionRules_Ids $rid -AttackSurfaceReductionRules_Actions $want
-        if ($needsCloud -and (Get-MpProp (Get-MpPreference) 'MAPSReporting') -eq 0) {
-            Write-Warning ("{0} depends on cloud-delivered protection; enable MAPSReporting=2 too." -f $rid)
-        }
+        Set-MpPreference -AttackSurfaceReductionRules_Ids $allRuleIds -AttackSurfaceReductionRules_Actions $allRuleActs
     }.GetNewClosure()
 }
 
@@ -576,7 +584,7 @@ else {
     Set-Step -Area 'SmartScreen' -Item 'Win32 SmartScreenEnabled (HKLM)' `
         -Current $ssCurrent -Target 'Warn' -ApplyNow:$applyNow `
         -Action {
-        if (-not (Test-Path -LiteralPath $ssPathHklm)) { $null = New-Item -LiteralPath $ssPathHklm -Force }
+        if (-not (Test-Path -LiteralPath $ssPathHklm)) { $null = New-Item -Path $ssPathHklm -Force }
         Set-ItemProperty -LiteralPath $ssPathHklm -Name 'SmartScreenEnabled' -Value 'Warn' -Type String
     }.GetNewClosure()
 
@@ -584,7 +592,7 @@ else {
     Set-Step -Area 'SmartScreen' -Item 'EnableWebContentEvaluation (AppHost)' `
         -Current $appHostCurrent -Target 1 -ApplyNow:$applyNow `
         -Action {
-        if (-not (Test-Path -LiteralPath $appHost)) { $null = New-Item -LiteralPath $appHost -Force }
+        if (-not (Test-Path -LiteralPath $appHost)) { $null = New-Item -Path $appHost -Force }
         Set-ItemProperty -LiteralPath $appHost -Name 'EnableWebContentEvaluation' -Value 1 -Type DWord
         Set-ItemProperty -LiteralPath $appHost -Name 'PreventOverride' -Value 0 -Type DWord
     }.GetNewClosure()
@@ -593,7 +601,7 @@ else {
     Set-Step -Area 'SmartScreen' -Item 'Edge SmartScreenEnabled' `
         -Current $edgeCurrent -Target 1 -ApplyNow:$applyNow `
         -Action {
-        if (-not (Test-Path -LiteralPath $edgePol)) { $null = New-Item -LiteralPath $edgePol -Force }
+        if (-not (Test-Path -LiteralPath $edgePol)) { $null = New-Item -Path $edgePol -Force }
         Set-ItemProperty -LiteralPath $edgePol -Name 'SmartScreenEnabled' -Value 1 -Type DWord
     }.GetNewClosure()
 
@@ -712,5 +720,6 @@ else {
 Write-Host ''
 
 if ($script:IsDotSourced) { return }
+
 
 

@@ -1,0 +1,23 @@
+{
+  "rows": [
+    {
+      "Item": "firewall:Domain",
+      "Value": 0
+    },
+    {
+      "Item": "firewall:Private",
+      "Value": 0
+    },
+    {
+      "Item": "firewall:Public",
+      "Value": 0
+    },
+    {
+      "Item": "WireGuard service",
+      "Value": "\"C:\\Program Files\\Proton\\VPN\\v5.1.7\\ProtonVPN.WireGuardService.exe\" \"C:\\Program Files\\Proton\\VPN\\v5.1.7\\ServiceData\\WireGuard\\ProtonVPN.conf\" \"tls\""
+    }
+  ],
+  "mode": "preview",
+  "log": "C:\\Users\\psand\\Desktop\\Harness Machine\\deepseek-v41-uncensored-powerstack\\Tools\\harden\\.state\\finalize-security-20261111T175118.log",
+  "elevated": false
+}

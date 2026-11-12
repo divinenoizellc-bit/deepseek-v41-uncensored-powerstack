@@ -527,3 +527,38 @@ That triple is the to-do list.
 | --- | --- | --- |
 | 2026-11-10 | Baseline measured. Scripts authored and smoke-tested. **No system changes applied.** | vpn-av-scout |
 | — | *(next entry: whoever runs `-Apply`, with the backup filename)* | |
+
+---
+
+## APPLIED — 2026-11-11 (this machine)
+
+The review findings were acted on, not just documented. Evidence:
+`Tools\harden\.state\finalize-security-20261111T175632.log` and `.result.json`.
+
+| Finding | Before | After | How |
+|---|---|---|---|
+| Windows Firewall | off on Domain, Private, Public | **on, all three**, inbound Block / outbound Allow | `FINALIZE-SECURITY.ps1 -Apply` |
+| LAN apps after firewall | — | AnyDesk 7070, Perforce p4s 1666, Unreal 1981/1985/1989/8558, local python 8686 allowed on **Private only** | per-port rules, `DSH LAN allow - …` |
+| RPC 135 / SMB 445 / WSD 5357 | reachable on LAN | **no rule added — blocked** | deliberate |
+| Defender PUA / cloud / network protection | 0 / 0 / 0 | **1 / 2 (advanced) / 1** | `harden-defender.ps1 -Apply` |
+| Controlled Folder Access | off | **Audit** (2) | same |
+| ASR rules | 0 configured | **18 configured: 15 Block, 3 Audit** (the dev-risk trio) | same, written in one batched call |
+| Edge SmartScreen | unset | SmartScreen + PUA + both prompt-override blocks = 1 | same |
+| Win32 SmartScreen | unset | `Warn` | same |
+| Model-weight exclusions | none | `~\Models`, `~\.cache\huggingface\hub`, `~\.ollama\models` | same, documented rationale incl. `scan-weights.ps1` |
+| ProtonVPN WireGuard service | pointed at deleted `v5.1.7\…` → fast protocol silently unavailable | **repointed to `v5.1.9`**, service starts on demand | `FINALIZE-SECURITY.ps1` step 3 |
+
+Three bugs in the scripts were found and fixed by running them for real:
+
+1. `harden-defender.ps1` applied ASR **one rule per `Set-MpPreference` call**. That cmdlet
+   replaces the whole rule set, so the result was exactly one rule. It now writes the
+   cumulative plan each step; verified `count = 18`.
+2. `New-Item -LiteralPath` does not exist in Windows PowerShell 5.1, so the Edge SmartScreen
+   registry keys were never created. Fixed to `-Path`; all four values now read back `1`.
+3. `sc.exe config … binPath=` failed with 1639 (ERROR_INVALID_COMMAND_LINE) through PowerShell's
+   native-argument quoting. Replaced with the service CIM `Change` method, which takes the
+   command line as data. The service now points at `v5.1.9`.
+
+Rollback: `Tools\harden\FINALIZE-SECURITY.ps1 -Apply -Revert` restores the firewall profiles and
+the WireGuard service path from the `.before.json` snapshot, and
+`Tools\harden\harden-defender.ps1 -Revert` restores the Defender values.

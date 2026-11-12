@@ -1,0 +1,34 @@
+﻿{
+    "capturedAt":  "2026-11-11T17:56:32.4573814-07:00",
+    "firewall":  [
+                     {
+                         "Name":  "Domain",
+                         "Enabled":  1,
+                         "DefaultInboundAction":  4,
+                         "DefaultOutboundAction":  2
+                     },
+                     {
+                         "Name":  "Private",
+                         "Enabled":  1,
+                         "DefaultInboundAction":  4,
+                         "DefaultOutboundAction":  2
+                     },
+                     {
+                         "Name":  "Public",
+                         "Enabled":  1,
+                         "DefaultInboundAction":  4,
+                         "DefaultOutboundAction":  2
+                     }
+                 ],
+    "wireguardService":  {
+                             "Name":  "ProtonVPN WireGuard",
+                             "PathName":  "\"C:\\Program Files\\Proton\\VPN\\v5.1.7\\ProtonVPN.WireGuardService.exe\" \"C:\\Program Files\\Proton\\VPN\\v5.1.7\\ServiceData\\WireGuard\\ProtonVPN.conf\" \"tls\"",
+                             "StartMode":  "Manual"
+                         },
+    "defender":  {
+                     "EnableControlledFolderAccess":  2,
+                     "EnableNetworkProtection":  1,
+                     "MAPSReporting":  2,
+                     "PUAProtection":  1
+                 }
+}

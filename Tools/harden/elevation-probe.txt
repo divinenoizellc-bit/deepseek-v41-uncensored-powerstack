@@ -1,0 +1,2 @@
+﻿probe copy: C:\Users\psand\Desktop\Harness Machine\deepseek-v41-uncensored-powerstack\Tools\harden\elevation-probe.txt
+probe copy: C:\Users\psand\Desktop\Harness Machine\deepseek-v41-uncensored-powerstack\Tools\harden\elevation-probe.txt
